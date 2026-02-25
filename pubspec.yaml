@@ -1,0 +1,13 @@
+name: my_app
+environment:
+  sdk: ^3.0.0
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.6.0
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/jmcbg.jpg
+  - assets/jmclogo.png
+  - assets/jenn.png
