@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dashboard_components.dart';
 
 class StudentAssistantDashboard extends StatelessWidget {
   const StudentAssistantDashboard({super.key});

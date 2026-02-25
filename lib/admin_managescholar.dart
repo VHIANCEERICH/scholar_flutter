@@ -122,7 +122,7 @@ class _ManageScholarScreenState extends State<ManageScholarScreen> {
                           prefixIcon: Icon(Icons.school))),
                   const SizedBox(height: 15),
                   DropdownButtonFormField<String>(
-                    value: _selectedType,
+                    initialValue: _selectedType,
                     decoration: const InputDecoration(
                         labelText: "Scholarship Category",
                         border: OutlineInputBorder()),

@@ -159,7 +159,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 child: SingleChildScrollView(
                   child: DataTable(
                     headingRowColor:
-                        MaterialStateProperty.all(const Color(0xFFF8F5FB)),
+                        WidgetStateProperty.all(const Color(0xFFF8F5FB)),
                     dataRowHeight: 65,
                     columns: const [
                       DataColumn(

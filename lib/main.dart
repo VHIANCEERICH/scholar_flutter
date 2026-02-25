@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 // Ensure these imports match your actual file names
 import 'role_selection.dart';
-import 'admin_login.dart';
+import 'admin_login.dart'; // Your new separated file
+import 'scholar_login.dart'; // Your new separated file
 import 'admin_main.dart';
 import 'scholar_main.dart';
 
@@ -97,7 +98,7 @@ class _MainPortalPageState extends State<MainPortalPage> {
                       const BoxConstraints(maxWidth: 900, maxHeight: 650),
                   padding: const EdgeInsets.all(40),
                   decoration: BoxDecoration(
-                    // UPDATED: High-Fidelity Purple Overlay (0xFF9C27B0)
+                    // High-Fidelity Purple Overlay
                     color: const Color(0xFF9C27B0).withOpacity(0.4),
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
@@ -115,6 +116,7 @@ class _MainPortalPageState extends State<MainPortalPage> {
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: currentState == PortalState.roleSelection
+                        // --- ROLE SELECTION SCREEN ---
                         ? RoleSelectionScreen(
                             key: const ValueKey('RoleSelect'),
                             onRoleSelected: (role) {
@@ -124,21 +126,29 @@ class _MainPortalPageState extends State<MainPortalPage> {
                               });
                             },
                           )
-                        : LoginScreen(
-                            key: const ValueKey('Login'),
-                            selectedRole: selectedRole,
-                            onLoginSuccess: (type) {
-                              setState(() {
-                                selectedScholarType = type;
-                                currentState = selectedRole == 'Admin'
-                                    ? PortalState.adminDashboard
-                                    : PortalState.scholarDashboard;
-                              });
-                            },
-                            onBack: () => setState(
-                              () => currentState = PortalState.roleSelection,
-                            ),
-                          ),
+                        // --- DYNAMIC LOGIN SCREEN ---
+                        : (selectedRole == 'Admin'
+                            ? AdminLoginScreen(
+                                key: const ValueKey('AdminLogin'),
+                                onLoginSuccess: (_) {
+                                  setState(() {
+                                    currentState = PortalState.adminDashboard;
+                                  });
+                                },
+                                onBack: () => setState(() =>
+                                    currentState = PortalState.roleSelection),
+                              )
+                            : ScholarLoginScreen(
+                                key: const ValueKey('ScholarLogin'),
+                                onLoginSuccess: (type) {
+                                  setState(() {
+                                    selectedScholarType = type;
+                                    currentState = PortalState.scholarDashboard;
+                                  });
+                                },
+                                onBack: () => setState(() =>
+                                    currentState = PortalState.roleSelection),
+                              )),
                   ),
                 ),
               ),

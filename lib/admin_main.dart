@@ -5,7 +5,7 @@ import 'verification.dart';
 import 'monitoring.dart';
 import 'reports.dart';
 import 'announcement.dart';
-import 'admin_managescholar.dart'; // IMPORT: Your new management module
+// IMPORT: Your new management module
 
 class AdminMainSkeleton extends StatefulWidget {
   final VoidCallback onLogout;

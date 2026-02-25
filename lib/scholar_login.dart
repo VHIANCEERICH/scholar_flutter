@@ -2,25 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AdminLoginScreen extends StatefulWidget {
+class ScholarLoginScreen extends StatefulWidget {
   final Function(String) onLoginSuccess;
   final VoidCallback onBack;
 
-  const AdminLoginScreen({
+  const ScholarLoginScreen({
     super.key,
     required this.onLoginSuccess,
     required this.onBack,
   });
 
   @override
-  State<AdminLoginScreen> createState() => _AdminLoginScreenState();
+  State<ScholarLoginScreen> createState() => _ScholarLoginScreenState();
 }
 
-class _AdminLoginScreenState extends State<AdminLoginScreen> {
+class _ScholarLoginScreenState extends State<ScholarLoginScreen> {
   // --- STATE VARIABLES ---
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   bool _isLoading = false;
+
+  String localScholarType = 'Student Assistant Scholar';
+  final List<String> scholarTypes = [
+    'Student Assistant Scholar',
+    'Varsity Scholar',
+    'Academic Scholar',
+    'Gift of Education Scholar',
+  ];
 
   @override
   void dispose() {
@@ -55,15 +63,15 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
         if (data.isNotEmpty) {
           String dbRole = data[0]['role'].toString().toLowerCase();
 
-          // Check if the user is actually an admin
-          if (dbRole == 'admin') {
+          // Check if the user is actually a scholar
+          if (dbRole == 'scholar') {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Welcome, ${data[0]['usr_fullname']}!")),
             );
-            // Tell main.dart to log us in as Admin!
-            widget.onLoginSuccess('Admin');
+            // Tell main.dart to log us in, and pass the selected type!
+            widget.onLoginSuccess(localScholarType);
           } else {
-            _showError("Unauthorized: You do not have Admin privileges.");
+            _showError("Unauthorized: You do not have Scholar privileges.");
           }
         } else {
           _showError("Invalid Email or Password");
@@ -92,7 +100,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       children: [
         // 1. BRANDING HEADER
         const Text(
-          'Admin Login',
+          'Scholar Login',
           style: TextStyle(
             color: Colors.white,
             fontSize: 24,
@@ -101,7 +109,31 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
         ),
         const SizedBox(height: 30),
 
-        // 2. INPUT FIELDS (Passing controllers!)
+        // 2. SCHOLAR TYPE DROPDOWN
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.white24),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: localScholarType,
+              dropdownColor: const Color(0xFF3B125A),
+              isExpanded: true,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              items: scholarTypes
+                  .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+                  .toList(),
+              onChanged: (val) => setState(() => localScholarType = val!),
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+
+        // 3. INPUT FIELDS (Now passing controllers!)
         _inputField('Email Address', Icons.email_outlined, _userController),
         const SizedBox(height: 15),
         _inputField('Password', Icons.lock_outline, _passController,
@@ -109,13 +141,13 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
         const SizedBox(height: 30),
 
-        // 3. LOGIN BUTTON / LOADING SPINNER
+        // 4. LOGIN BUTTON / LOADING SPINNER
         if (_isLoading)
           const CircularProgressIndicator(color: Colors.white)
         else
           _loginBtn('LOGIN', _handleLogin),
 
-        // 4. BACK BUTTON
+        // 5. BACK BUTTON
         const SizedBox(height: 10),
         TextButton(
           onPressed: widget.onBack,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dashboard_components.dart';
 
 class VarsityDashboard extends StatelessWidget {
   const VarsityDashboard({super.key});
